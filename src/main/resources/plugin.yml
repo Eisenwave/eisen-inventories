@@ -1,0 +1,8 @@
+name: EisenInventories
+main: eisenwave.inv.EisenInventoriesPlugin
+version: 0.1
+
+commands:
+  invtest:
+    usage: "/invtest"
+    permission: eiseninv.invtest
