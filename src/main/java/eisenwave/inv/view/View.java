@@ -1,6 +1,7 @@
 package eisenwave.inv.view;
 
 import eisenwave.inv.menu.Menu;
+import eisenwave.inv.menu.MenuResponse;
 import eisenwave.inv.widget.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -238,7 +239,9 @@ public abstract class View implements Redrawable {
      * @param player the player who performs the action
      * @param action the action to perform
      */
-    public void performAction(Player player, ViewAction action) {}
+    public MenuResponse performAction(Player player, ViewAction action) {
+        return MenuResponse.EMPTY;
+    }
     
     // DRAWABLE IMPL
     

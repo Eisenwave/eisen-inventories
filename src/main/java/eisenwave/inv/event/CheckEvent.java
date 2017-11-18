@@ -2,9 +2,10 @@ package eisenwave.inv.event;
 
 import eisenwave.inv.view.View;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.jetbrains.annotations.NotNull;
 
-public class CheckEvent extends ClickEvent {
+public class CheckEvent extends ViewEvent {
     
     private final boolean previous, checked;
     

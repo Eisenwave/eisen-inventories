@@ -3,8 +3,10 @@ package eisenwave.inv.widget;
 import eisenwave.inv.event.ClickEvent;
 import eisenwave.inv.event.ClickListener;
 import eisenwave.inv.menu.Menu;
+import eisenwave.inv.menu.MenuResponse;
 import eisenwave.inv.view.*;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,14 +33,15 @@ public class Button extends View implements Clickable {
     // CLICKABLE IMPL
     
     @Override
-    public void performAction(Player player, ViewAction action) {
+    public MenuResponse performAction(Player player, ViewAction action) {
         if (action.getType() == ViewActionType.CLICK)
-            performClick(player);
+            performClick(player, action.getClickType());
+        return MenuResponse.OK;
     }
     
     @Override
-    public void performClick(Player player) {
-        ClickEvent action = new ClickEvent(this, player);
+    public void performClick(Player player, ClickType type) {
+        ClickEvent action = new ClickEvent(this, player, type);
         for (ClickListener listener : listeners) {
             listener.onClick(action);
         }

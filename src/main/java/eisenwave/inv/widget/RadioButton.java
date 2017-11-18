@@ -3,6 +3,7 @@ package eisenwave.inv.widget;
 import eisenwave.inv.event.CheckEvent;
 import eisenwave.inv.event.CheckListener;
 import eisenwave.inv.menu.Menu;
+import eisenwave.inv.menu.MenuResponse;
 import eisenwave.inv.view.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -30,8 +31,8 @@ public class RadioButton extends View implements Checkable {
     
     public RadioButton(@NotNull Menu menu, @Nullable ViewStyle style) {
         super(menu.getContentPane(), menu, new Style(style), new ViewSize(1, 1, true, true));
-        this.checkedItem = getStyle().getItem("checkbox.checked");
-        this.uncheckedItem = getStyle().getItem("checkbox.unchecked");
+        this.checkedItem = getStyle().getItem("radio.checked");
+        this.uncheckedItem = getStyle().getItem("radio.unchecked");
     }
     
     @Override
@@ -60,9 +61,11 @@ public class RadioButton extends View implements Checkable {
     }
     
     @Override
-    public void performAction(Player player, ViewAction action) {
+    public MenuResponse performAction(Player player, ViewAction action) {
+        boolean before = checked;
         if (action.getType() == ViewActionType.CLICK)
             performToggle(player);
+        return this.checked != before? MenuResponse.OK : MenuResponse.BLOCK;
     }
     
     @Override

@@ -2,6 +2,7 @@ package eisenwave.inv.widget;
 
 import eisenwave.inv.event.CheckListener;
 import eisenwave.inv.menu.Menu;
+import eisenwave.inv.view.ViewSize;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -13,8 +14,8 @@ public class RadioList extends SimpleList<RadioButton> {
     
     private int picked;
     
-    public RadioList(@NotNull Menu menu) {
-        super(menu);
+    public RadioList(@NotNull Menu menu, @NotNull ViewSize size) {
+        super(menu, size);
     }
     
     /**

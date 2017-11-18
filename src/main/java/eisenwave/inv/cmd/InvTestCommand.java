@@ -59,7 +59,7 @@ public class InvTestCommand implements CommandExecutor {
             bar.setProgress(0.5f);
             getContentPane().addChild(bar);
     
-            RadioList radios = new RadioList(this);
+            RadioList radios = new RadioList(this, ViewSize.matchParent());
             for (int i = 0; i < 5; i++)
                 radios.addChild(new RadioButton(this, null));
             radios.setPosition(1, 5);

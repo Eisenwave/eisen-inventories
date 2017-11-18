@@ -9,6 +9,24 @@ public class ViewSize {
         MATCH_PARENT = -1004,
         WRAP_CONTENT = -1005;
     
+    /**
+     * Returns the largest possible view size.
+     *
+     * @return the largest possible view size
+     */
+    public static ViewSize matchParent() {
+        return new ViewSize(MINIMUM, MINIMUM, MATCH_PARENT, MATCH_PARENT);
+    }
+    
+    /**
+     * Returns the smallest possible view size.
+     *
+     * @return the smallest possible view size
+     */
+    public static ViewSize wrapContent() {
+        return new ViewSize(MINIMUM, MINIMUM, WRAP_CONTENT, WRAP_CONTENT);
+    }
+    
     private final boolean staticWidth, staticHeight;
     private int x, y, width, height;
     
@@ -22,7 +40,7 @@ public class ViewSize {
     }
     
     public ViewSize(int width, int height, boolean staticWidth, boolean staticHeight) {
-        this(0, 0, width, height, staticWidth, staticHeight);
+        this(MINIMUM, MINIMUM, width, height, staticWidth, staticHeight);
     }
     
     public ViewSize(int x, int y, int width, int height) {
@@ -30,7 +48,7 @@ public class ViewSize {
     }
     
     public ViewSize(int width, int height) {
-        this(0, 0, width, height);
+        this(MINIMUM, MINIMUM, width, height);
     }
     
     // GETTERS

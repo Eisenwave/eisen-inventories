@@ -4,6 +4,7 @@ import eisenwave.inv.view.*;
 import eisenwave.inv.widget.MenuPane;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.*;
@@ -131,19 +132,34 @@ public class Menu {
     
     // ACTIONS
     
-    public void click(Player player, int x, int y) {
-        if (!interactable) return;
+    /**
+     * Performs a click inside this menu.
+     *
+     * @param player the player who clicked
+     * @param x the x-coordinate of the click
+     * @param y the y-coordinate of the click
+     * @param click the type of the click
+     * @return the response
+     */
+    public MenuResponse performClick(Player player, int x, int y, ClickType click) {
+        if (!interactable) return MenuResponse.BLOCK;
         
         Icon icon = this.buffer.get(x, y);
         if (icon != null) {
-            System.out.println("clicked icon");
+            //System.out.println("clicked icon");
             View view = icon.getView();
-            view.performAction(player, new ViewAction(ViewActionType.CLICK));
+            System.out.println(click);
+            return view.performAction(player, new ViewAction(ViewActionType.CLICK, click));
         }
         else {
-            System.out.println("clicked empty slot");
+            return MenuResponse.EMPTY;
+            //System.out.println("clicked empty slot");
         }
     }
+    
+    public void performClose(Player player) {}
+    
+    public void performOpen(Player player) {}
     
     public void draw() {
         if (invalid.isEmpty()) return;

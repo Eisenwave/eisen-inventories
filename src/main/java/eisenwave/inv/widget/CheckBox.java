@@ -2,6 +2,7 @@ package eisenwave.inv.widget;
 
 import eisenwave.inv.event.*;
 import eisenwave.inv.menu.Menu;
+import eisenwave.inv.menu.MenuResponse;
 import eisenwave.inv.view.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -44,9 +45,11 @@ public class CheckBox extends View implements Checkable {
     }
     
     @Override
-    public void performAction(Player player, ViewAction action) {
+    public MenuResponse performAction(Player player, ViewAction action) {
+        //player.sendMessage(action.getClickType().name());
         if (action.getType() == ViewActionType.CLICK)
             performToggle(player);
+        return MenuResponse.OK;
     }
     
     @Override

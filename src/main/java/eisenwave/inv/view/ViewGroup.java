@@ -69,7 +69,7 @@ public abstract class ViewGroup<T extends View> extends View implements Iterable
     }
     
     @Override
-    public void drawContent(IconBuffer buffer) {
+    protected void drawContent(IconBuffer buffer) {
         for (View child : children) {
             if (!child.isInvalidated()) continue;
             System.out.println("drawing " + child.getClass().getSimpleName() + " inside view group");

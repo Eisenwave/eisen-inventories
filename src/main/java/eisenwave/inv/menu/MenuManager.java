@@ -38,7 +38,7 @@ public final class MenuManager implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInteract(InventoryClickEvent event) {
         Menu menu = menuMap.get(event.getWhoClicked());
-        if (menu == null) return;
+        if (menu == null || !menu.isInteractable()) return;
         
         int slot = event.getSlot();
         if (event.getRawSlot() != slot || event.getSlot() < 0) {
@@ -49,20 +49,29 @@ public final class MenuManager implements Listener {
         }
         
         //Bukkit.broadcastMessage( event.getSlotType().toString() + " " + event.getSlot() + " " + event.getRawSlot());
+        Player player = (Player) event.getWhoClicked();
         int x = slot % menu.getWidth(), y = slot / menu.getWidth();
-        menu.click((Player) event.getWhoClicked(), x, y);
+        MenuResponse response = menu.performClick(player, x, y, event.getClick());
         menu.setInteractable(false);
         event.setCancelled(true);
+        
+        player.sendMessage(response.name());
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onClose(InventoryCloseEvent event) {
-        menuMap.remove(event.getPlayer());
+        Player player = (Player) event.getPlayer();
+        Menu menu = menuMap.remove(player);
+        if (menu != null)
+            menu.performClose(player);
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent event) {
-        menuMap.remove(event.getPlayer());
+        Player player = event.getPlayer();
+        Menu menu = menuMap.remove(player);
+        if (menu != null)
+            menu.performClose(player);
     }
     
     // ACTIONS

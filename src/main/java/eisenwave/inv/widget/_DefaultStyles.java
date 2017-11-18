@@ -11,6 +11,7 @@ final class _DefaultStyles {
         BUTTON_ITEM = itemStack(Material.EMERALD, "&eButton"),
         CHECKBOX_UNCHECKED = itemStack(Material.FIREWORK_CHARGE, "&8Unchecked"),
         CHECKBOX_CHECKED = itemStack(Material.SLIME_BALL, "&aChecked"),
+        DISPLAY_ITEM = new ItemStack(Material.PAPER),
         RADIO_BUTTON_CHECKED = new ItemStack(Material.INK_SACK, 1, (short) 10),
         RADIO_BUTTON_UNCHECKED = new ItemStack(Material.INK_SACK, 1, (short) 8),
         PANE_ITEM = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15),
