@@ -4,6 +4,7 @@ import eisenwave.inv.event.CheckEvent;
 import eisenwave.inv.event.CheckListener;
 import eisenwave.inv.menu.Menu;
 import eisenwave.inv.menu.MenuResponse;
+import eisenwave.inv.style.Stylesheet;
 import eisenwave.inv.view.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -21,16 +22,16 @@ import java.util.Set;
  * Radio buttons are normally used together in a RadioGroup. When several radio buttons live inside a radio group,
  * checking one radio button unchecks all the others.
  */
-public class RadioButton extends View implements Checkable {
+public class RadioButton extends Widget implements Checkable {
     
-    private final ItemStack checkedItem, uncheckedItem;
+    private ItemStack checkedItem, uncheckedItem;
     
     private final Set<CheckListener> listeners = new HashSet<>();
     
     private boolean checked = false;
     
-    public RadioButton(@NotNull Menu menu, @Nullable ViewStyle style) {
-        super(menu.getContentPane(), menu, new Style(style), new ViewSize(1, 1, true, true));
+    public RadioButton(@NotNull Menu menu, @Nullable Stylesheet style) {
+        super(menu, new ViewSize(1, 1, true, true), new Style(style));
         this.checkedItem = getStyle().getItem("radio.checked");
         this.uncheckedItem = getStyle().getItem("radio.unchecked");
     }
@@ -70,7 +71,7 @@ public class RadioButton extends View implements Checkable {
     
     @Override
     public void performToggle(Player player) {
-        CheckEvent action = new CheckEvent(this, player, !checked, checked);
+        CheckEvent action = new CheckEvent(this, player, !checked);
         for (CheckListener listener : listeners)
             listener.onCheck(action);
         this.toggle();
@@ -106,9 +107,29 @@ public class RadioButton extends View implements Checkable {
         return uncheckedItem.clone();
     }
     
-    private static class Style extends ViewStyle {
+    /**
+     * Sets the checked-state item.
+     *
+     * @param item the item
+     */
+    public void setCheckedItem(ItemStack item) {
+        this.checkedItem = item.clone();
+        this.invalidate();
+    }
+    
+    /**
+     * Sets the unchecked-state item.
+     *
+     * @param item the item
+     */
+    public void setUncheckedItem(ItemStack item) {
+        this.uncheckedItem = item.clone();
+        this.invalidate();
+    }
+    
+    private static class Style extends Stylesheet {
         
-        public Style(@Nullable ViewStyle parent) {
+        public Style(@Nullable Stylesheet parent) {
             super(parent);
             defineItem("radio.checked", _DefaultStyles.RADIO_BUTTON_CHECKED);
             defineItem("radio.unchecked", _DefaultStyles.RADIO_BUTTON_UNCHECKED);

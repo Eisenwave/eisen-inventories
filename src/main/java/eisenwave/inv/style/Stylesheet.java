@@ -1,4 +1,4 @@
-package eisenwave.inv.view;
+package eisenwave.inv.style;
 
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
@@ -15,17 +15,17 @@ import java.util.Map;
  * View styles are intended to work as immutable lookup tables for items and other information necessary to display an
  * icon. Each widget should implement its own style.
  */
-public class ViewStyle {
+public class Stylesheet {
     
     @Nullable
-    private final ViewStyle parent;
+    private final Stylesheet parent;
     private final Map<String, ItemStack> icons = new HashMap<>();
     
-    public ViewStyle(@Nullable ViewStyle parent) {
+    public Stylesheet(@Nullable Stylesheet parent) {
         this.parent = parent;
     }
     
-    public ViewStyle() {
+    public Stylesheet() {
         this(null);
     }
     
@@ -58,7 +58,7 @@ public class ViewStyle {
      * @return the parent style or null
      */
     @Contract(pure = true)
-    public ViewStyle getParent() {
+    public Stylesheet getParent() {
         return parent;
     }
     

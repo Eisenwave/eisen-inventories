@@ -2,19 +2,20 @@ package eisenwave.inv.widget;
 
 import eisenwave.commons.util.PrimMath;
 import eisenwave.inv.menu.Menu;
+import eisenwave.inv.style.Stylesheet;
 import eisenwave.inv.view.*;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ProgressBar extends View {
+public class ProgressBar extends Widget {
     
     private final ItemStack onItem, offItem;
     
     private boolean vertical = false;
     private float progress = 0F;
     
-    public ProgressBar(@NotNull Menu menu, @Nullable ViewStyle style) {
+    public ProgressBar(@NotNull Menu menu, @Nullable Stylesheet style) {
         super(menu, new Style(style));
         this.onItem = getStyle().getItem("progressbar.on");
         this.offItem = getStyle().getItem("progressbar.off");
@@ -65,9 +66,9 @@ public class ProgressBar extends View {
         final int
             width = getWidth(),
             height = getHeight();
-        ViewStyle style = getStyle();
-        Icon on = new Icon(this, style.getItem("progressbar.on"));
-        Icon off = new Icon(this, style.getItem("progressbar.off"));
+        Stylesheet style = getStyle();
+        Icon on = new Icon(this, onItem);
+        Icon off = new Icon(this, offItem);
         
         if (!vertical) {
             int onWidth = (int) (width * getProgress());
@@ -100,9 +101,9 @@ public class ProgressBar extends View {
         return offItem.clone();
     }
     
-    private static class Style extends ViewStyle {
+    private static class Style extends Stylesheet {
         
-        public Style(@Nullable ViewStyle parent) {
+        public Style(@Nullable Stylesheet parent) {
             super(parent);
             defineItem("progressbar.on", _DefaultStyles.PROGRESSBAR_ON);
             defineItem("progressbar.off", _DefaultStyles.PROGRESSBAR_OFF);

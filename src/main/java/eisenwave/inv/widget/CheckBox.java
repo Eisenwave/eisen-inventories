@@ -3,6 +3,7 @@ package eisenwave.inv.widget;
 import eisenwave.inv.event.*;
 import eisenwave.inv.menu.Menu;
 import eisenwave.inv.menu.MenuResponse;
+import eisenwave.inv.style.Stylesheet;
 import eisenwave.inv.view.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -12,16 +13,16 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CheckBox extends View implements Checkable {
+public class CheckBox extends Widget implements Checkable {
     
-    private final ItemStack checkedItem, uncheckedItem;
+    private ItemStack checkedItem, uncheckedItem;
     
     private final Set<CheckListener> listeners = new HashSet<>();
     
     private boolean checked = false;
     
-    public CheckBox(@NotNull Menu menu, @Nullable ViewStyle style) {
-        super(menu.getContentPane(), menu, new Style(style), new ViewSize(1, 1, true, true));
+    public CheckBox(@NotNull Menu menu, @Nullable Stylesheet style) {
+        super(menu, new ViewSize(1, 1, true, true), new Style(style));
         this.checkedItem = getStyle().getItem("checkbox.checked");
         this.uncheckedItem = getStyle().getItem("checkbox.unchecked");
     }
@@ -55,7 +56,7 @@ public class CheckBox extends View implements Checkable {
     @Override
     public void performToggle(Player player) {
         System.out.println("performing toggle");
-        CheckEvent action = new CheckEvent(this, player, checked, !checked);
+        CheckEvent action = new CheckEvent(this, player, !checked);
         for (CheckListener listener : listeners)
             listener.onCheck(action);
         this.toggle();
@@ -97,9 +98,29 @@ public class CheckBox extends View implements Checkable {
         return uncheckedItem.clone();
     }
     
-    private static class Style extends ViewStyle {
+    /**
+     * Sets the checked-state item.
+     *
+     * @param item the item
+     */
+    public void setCheckedItem(ItemStack item) {
+        this.checkedItem = item.clone();
+        this.invalidate();
+    }
+    
+    /**
+     * Sets the unchecked-state item.
+     *
+     * @param item the item
+     */
+    public void setUncheckedItem(ItemStack item) {
+        this.uncheckedItem = item.clone();
+        this.invalidate();
+    }
+    
+    private static class Style extends Stylesheet {
         
-        public Style(@Nullable ViewStyle parent) {
+        public Style(@Nullable Stylesheet parent) {
             super(parent);
             defineItem("checkbox.unchecked", _DefaultStyles.CHECKBOX_UNCHECKED);
             defineItem("checkbox.checked", _DefaultStyles.CHECKBOX_CHECKED);

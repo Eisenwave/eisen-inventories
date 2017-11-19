@@ -1,16 +1,17 @@
 package eisenwave.inv.widget;
 
 import eisenwave.inv.menu.Menu;
+import eisenwave.inv.style.Stylesheet;
 import eisenwave.inv.view.*;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class Pane extends View {
+public class Pane extends Widget {
     
     private final ItemStack item;
     
-    public Pane(@NotNull Menu menu, @Nullable ViewStyle style) {
+    public Pane(@NotNull Menu menu, @Nullable Stylesheet style) {
         super(menu, new Style(style));
         this.item = getStyle().getItem("pane.item");
     }
@@ -31,9 +32,9 @@ public class Pane extends View {
         return item.clone();
     }
     
-    private static class Style extends ViewStyle {
+    private static class Style extends Stylesheet {
         
-        public Style(@Nullable ViewStyle parent) {
+        public Style(@Nullable Stylesheet parent) {
             super(parent);
             defineItem("pane.item", _DefaultStyles.PANE_ITEM);
         }

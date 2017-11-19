@@ -20,7 +20,7 @@ public abstract class ViewGroup<T extends View> extends View implements Iterable
     protected final List<T> children = new ArrayList<>();
     
     protected ViewGroup(View parent, Menu menu, @NotNull ViewSize size) {
-        super(parent, menu, new ViewStyle(), size);
+        super(parent, menu, size);
     }
     
     public ViewGroup(@NotNull Menu menu) {
@@ -71,12 +71,12 @@ public abstract class ViewGroup<T extends View> extends View implements Iterable
     @Override
     protected void drawContent(IconBuffer buffer) {
         for (View child : children) {
-            if (!child.isInvalidated()) continue;
+            //if (!child.isInvalidated()) continue;
             System.out.println("drawing " + child.getClass().getSimpleName() + " inside view group");
             if (!child.isHidden()) {
                 IconBuffer childBuffer = new IconBuffer(child.getWidth(), child.getHeight());
                 child.draw(childBuffer);
-                buffer.set(child.getX(), child.getY(), childBuffer);
+                buffer.set(child.getRelX(), child.getRelY(), childBuffer);
             }
             child.revalidate();
         }

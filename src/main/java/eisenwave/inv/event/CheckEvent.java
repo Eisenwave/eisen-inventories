@@ -2,35 +2,18 @@ package eisenwave.inv.event;
 
 import eisenwave.inv.view.View;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Called when the checking state of a view changes.
+ */
 public class CheckEvent extends ViewEvent {
     
-    private final boolean previous, checked;
+    private final boolean checked;
     
-    public CheckEvent(@NotNull View view, @NotNull Player player, boolean previous, boolean checked) {
+    public CheckEvent(@NotNull View view, @NotNull Player player, boolean checked) {
         super(view, player);
-        this.previous = previous;
         this.checked = checked;
-    }
-    
-    /**
-     * Returns whether the checking state has changed during this action.
-     *
-     * @return whether the checking state has changed
-     */
-    public boolean hasChanged() {
-        return previous != checked;
-    }
-    
-    /**
-     * Returns the previous checking state
-     *
-     * @return the previous checking state
-     */
-    public boolean getPrevious() {
-        return previous;
     }
     
     /**

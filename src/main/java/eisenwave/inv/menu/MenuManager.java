@@ -1,5 +1,7 @@
 package eisenwave.inv.menu;
 
+import eisenwave.inv.error.DrawException;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,6 +12,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public final class MenuManager implements Listener {
     
@@ -29,14 +32,13 @@ public final class MenuManager implements Listener {
     // EVENTS & TICK
     
     public void onTick() {
-        menuMap.values().parallelStream().forEach(menu -> {
-            menu.draw();
-            menu.setInteractable(true);
-        });
+        DrawTask task = new DrawTask();
+        menuMap.values().parallelStream().forEach(task);
     }
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInteract(InventoryClickEvent event) {
+        //Bukkit.broadcastMessage("interacting on primary? "+Bukkit.getServer().isPrimaryThread());
         Menu menu = menuMap.get(event.getWhoClicked());
         if (menu == null || !menu.isInteractable()) return;
         
@@ -87,6 +89,21 @@ public final class MenuManager implements Listener {
     }
     
     // UTIL
+    
+    private static class DrawTask implements Consumer<Menu> {
+        
+        @Override
+        public void accept(Menu menu) {
+            try {
+                menu.draw();
+            } catch (DrawException ex) {
+                menu.revalidate();
+                ex.printStackTrace();
+            }
+            menu.setInteractable(true);
+        }
+        
+    }
     
     
 }

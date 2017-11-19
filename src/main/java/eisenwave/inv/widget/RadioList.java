@@ -33,7 +33,7 @@ public class RadioList extends SimpleList<RadioButton> {
      * @param index the index
      */
     public void pick(int index) {
-        System.out.println("picking: picked = " + picked + ", index = " + index);
+        //System.out.println("picking: picked = " + picked + ", index = " + index);
         if (picked == index) return;
         
         final int size = children.size();
@@ -54,10 +54,7 @@ public class RadioList extends SimpleList<RadioButton> {
     public void addChild(RadioButton child) {
         int index = children.size();
         super.addChild(child);
-        CheckListener listener = action -> {
-            if (action.hasChanged())
-                pick(index);
-        };
+        CheckListener listener = event -> pick(index);
         //System.out.println("adding radio button with index " + index);
         child.addCheckListener(listener);
         listenerMap.put(child, listener);

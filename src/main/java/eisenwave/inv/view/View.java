@@ -18,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
 public abstract class View implements Redrawable {
     
     private final Menu menu;
-    private final ViewStyle style;
     private View parent;
     private ViewSize size;
     
@@ -30,14 +29,12 @@ public abstract class View implements Redrawable {
      *
      * @param parent the parent view
      * @param menu the menu
-     * @param style the style of this view
      * @see Menu#getContentPane()
      */
-    protected View(View parent, Menu menu, @NotNull ViewStyle style, @NotNull ViewSize size) {
+    protected View(View parent, Menu menu, @NotNull ViewSize size) {
         if (parent == null && this != this.getParent())
             throw new NullPointerException("view must either be its own parent or be constructed with one");
         this.parent = parent;
-        this.style = style;
         this.menu = menu;
         this.size = size;
     }
@@ -46,11 +43,10 @@ public abstract class View implements Redrawable {
      * Constructs a new view.
      *
      * @param menu the menu
-     * @param style the style of this view
      * @see Menu#getContentPane()
      */
-    public View(@NotNull Menu menu, @NotNull ViewStyle style) {
-        this(menu.getContentPane(), menu, style, new ViewSize(ViewSize.MATCH_PARENT, ViewSize.MATCH_PARENT));
+    protected View(@NotNull Menu menu) {
+        this(menu.getContentPane(), menu, new ViewSize(ViewSize.MATCH_PARENT, ViewSize.MATCH_PARENT));
     }
     
     /*
@@ -97,16 +93,6 @@ public abstract class View implements Redrawable {
     }
     
     /**
-     * Returns the style of this view.
-     *
-     * @return the style
-     */
-    @NotNull
-    protected ViewStyle getStyle() {
-        return style;
-    }
-    
-    /**
      * Returns the view's position inside the menu.
      *
      * @return the absolute x
@@ -132,8 +118,8 @@ public abstract class View implements Redrawable {
     public int getRelX() {
         int result = size.getX();
         switch (result) {
-            case ViewSize.MINIMUM: return 0;
-            case ViewSize.MAXIMUM: {
+            case ViewSize.MIN_POS: return 0;
+            case ViewSize.MAX_POS: {
                 return (size.getWidth() == ViewSize.MATCH_PARENT)?
                     0 : getParent().getWidth() - this.getWidth();
             }
@@ -153,8 +139,8 @@ public abstract class View implements Redrawable {
     public int getRelY() {
         int result = size.getY();
         switch (result) {
-            case ViewSize.MINIMUM: return 0;
-            case ViewSize.MAXIMUM: {
+            case ViewSize.MIN_POS: return 0;
+            case ViewSize.MAX_POS: {
                 return (size.getHeight() == ViewSize.MATCH_PARENT)?
                     0 : getParent().getHeight() - this.getHeight();
             }
@@ -210,6 +196,15 @@ public abstract class View implements Redrawable {
     }
     
     /**
+     * Returns the area of this view.
+     *
+     * @return the area
+     */
+    public int getArea() {
+        return getWidth() * getHeight();
+    }
+    
+    /**
      * Returns the minimum width of the content of this view.
      * <p>
      * Views which have arbitrary dimensions such as {@link Pane} or {@link ProgressBar} default to 1.
@@ -245,13 +240,15 @@ public abstract class View implements Redrawable {
     
     // DRAWABLE IMPL
     
-    
     @Override
     public final void draw(IconBuffer buffer) {
         if (!isHidden())
             drawContent(buffer);
         revalidate();
     }
+    
+    @Override
+    public void prepareDraw() {}
     
     /**
      * Draws the content of this view into the icon buffer.
@@ -354,6 +351,11 @@ public abstract class View implements Redrawable {
             this.hidden = hidden;
             this.invalidate();
         }
+    }
+    
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
     }
     
 }

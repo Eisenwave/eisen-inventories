@@ -108,14 +108,37 @@ public class IconBuffer {
                 this.set(x + i, y + j, buffer.get(i, j));
     }
     
+    /**
+     * Fills an area of a buffer with an icon.
+     *
+     * @param minX the minimum x-coordinate of the area
+     * @param minY the minimum y-coordinate of the area
+     * @param limX the x-limit (exclusive maximum)
+     * @param limY the y-limit (exclusive maximum)
+     * @param icon the icon to draw
+     */
     public void fill(int minX, int minY, int limX, int limY, @Nullable Icon icon) {
         for (int x = minX; x < limX; x++)
             for (int y = minY; y < limY; y++)
                 set(x, y, icon);
     }
     
+    /**
+     * Fills an area of a buffer with an icon.
+     *
+     * @param limX the x-limit (exclusive maximum)
+     * @param limY the y-limit (exclusive maximum)
+     * @param icon the icon to draw
+     */
     public void fill(int limX, int limY, @Nullable Icon icon) {
         fill(0, 0, limX, limY, icon);
+    }
+    
+    /**
+     * Fills the entire buffer with an icon.
+     */
+    public void fill(@Nullable Icon icon) {
+        Arrays.fill(buffer, icon);
     }
     
     /*

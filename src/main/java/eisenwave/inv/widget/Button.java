@@ -4,6 +4,7 @@ import eisenwave.inv.event.ClickEvent;
 import eisenwave.inv.event.ClickListener;
 import eisenwave.inv.menu.Menu;
 import eisenwave.inv.menu.MenuResponse;
+import eisenwave.inv.style.Stylesheet;
 import eisenwave.inv.view.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -14,14 +15,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Button extends View implements Clickable {
+public class Button extends Widget implements Clickable {
     
-    private final ItemStack item;
+    private ItemStack item;
     
     private final Set<ClickListener> listeners = new HashSet<>();
     
-    public Button(@NotNull Menu menu, @Nullable ViewStyle style) {
-        super(menu.getContentPane(), menu, new Style(style), new ViewSize(1, 1, true, true));
+    public Button(@NotNull Menu menu, @Nullable Stylesheet style) {
+        super(menu, new ViewSize(1, 1, true, true), new Style(style));
         this.item = getStyle().getItem("button.item");
     }
     
@@ -68,9 +69,19 @@ public class Button extends View implements Clickable {
         return item.clone();
     }
     
-    private static class Style extends ViewStyle {
+    /**
+     * Sets the button's item to a copy of the given item.
+     *
+     * @param item the item
+     */
+    public void setItem(ItemStack item) {
+        this.item = item.clone();
+        this.invalidate();
+    }
+    
+    private static class Style extends Stylesheet {
         
-        public Style(@Nullable ViewStyle parent) {
+        public Style(@Nullable Stylesheet parent) {
             super(parent);
             defineItem("button.item", _DefaultStyles.BUTTON_ITEM);
         }

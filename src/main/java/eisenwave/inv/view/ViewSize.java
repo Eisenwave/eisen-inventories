@@ -3,8 +3,8 @@ package eisenwave.inv.view;
 public class ViewSize {
     
     public final static int
-        MINIMUM = -1001,
-        MAXIMUM = -1002,
+        MIN_POS = -1001,
+        MAX_POS = -1002,
         CENTER =  -1003,
         MATCH_PARENT = -1004,
         WRAP_CONTENT = -1005;
@@ -15,7 +15,7 @@ public class ViewSize {
      * @return the largest possible view size
      */
     public static ViewSize matchParent() {
-        return new ViewSize(MINIMUM, MINIMUM, MATCH_PARENT, MATCH_PARENT);
+        return new ViewSize(MIN_POS, MIN_POS, MATCH_PARENT, MATCH_PARENT);
     }
     
     /**
@@ -24,7 +24,7 @@ public class ViewSize {
      * @return the smallest possible view size
      */
     public static ViewSize wrapContent() {
-        return new ViewSize(MINIMUM, MINIMUM, WRAP_CONTENT, WRAP_CONTENT);
+        return new ViewSize(MIN_POS, MIN_POS, WRAP_CONTENT, WRAP_CONTENT);
     }
     
     private final boolean staticWidth, staticHeight;
@@ -40,7 +40,7 @@ public class ViewSize {
     }
     
     public ViewSize(int width, int height, boolean staticWidth, boolean staticHeight) {
-        this(MINIMUM, MINIMUM, width, height, staticWidth, staticHeight);
+        this(MIN_POS, MIN_POS, width, height, staticWidth, staticHeight);
     }
     
     public ViewSize(int x, int y, int width, int height) {
@@ -48,7 +48,7 @@ public class ViewSize {
     }
     
     public ViewSize(int width, int height) {
-        this(MINIMUM, MINIMUM, width, height);
+        this(MIN_POS, MIN_POS, width, height);
     }
     
     // GETTERS
@@ -110,13 +110,13 @@ public class ViewSize {
     // SETTERS
     
     public void setX(int x) {
-        if (x < 0 && x != MINIMUM && x != MAXIMUM && x != CENTER)
+        if (x < 0 && x != MIN_POS && x != MAX_POS && x != CENTER)
             throw new IllegalArgumentException("invalid x: "+x);
         this.x = x;
     }
     
     public void setY(int y) {
-        if (y < 0 && y != MINIMUM && y != MAXIMUM && y != CENTER)
+        if (y < 0 && y != MIN_POS && y != MAX_POS && y != CENTER)
             throw new IllegalArgumentException("invalid y: "+y);
         this.y = y;
     }

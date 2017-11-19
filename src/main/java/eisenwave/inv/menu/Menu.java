@@ -1,5 +1,6 @@
 package eisenwave.inv.menu;
 
+import eisenwave.inv.error.DrawException;
 import eisenwave.inv.view.*;
 import eisenwave.inv.widget.MenuPane;
 import org.bukkit.Bukkit;
@@ -9,9 +10,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.*;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Menu {
     
@@ -24,6 +23,8 @@ public class Menu {
     private final Inventory inventory;
     private final MenuPane contentPane;
     private IconBuffer buffer;
+    
+    private boolean drawing = false;
     
     private final int width, height;
     
@@ -121,6 +122,8 @@ public class Menu {
         return interactable;
     }
     
+    // MUTATORS
+    
     /**
      * Sets the menu to be interactable.
      *
@@ -161,10 +164,20 @@ public class Menu {
     
     public void performOpen(Player player) {}
     
+    /**
+     * Draws the menu into its inventory.
+     *
+     * @throws DrawException if an error occurs when drawing widgets
+     */
     public void draw() {
         if (invalid.isEmpty()) return;
+        
+        for (View view : invalid.toArray(new View[invalid.size()]))
+            view.prepareDraw();
+        
         //System.out.println(ANSI.YELLOW + "draw call!" + ANSI.RESET);
         //this.buffer.clear();
+        drawing = true;
         
         if (contentPane.isInvalidated()) {
             //System.out.println("drawing: "+contentPane.getClass().getSimpleName());
@@ -172,38 +185,46 @@ public class Menu {
             int lim = buffer.getSize();
             ItemStack[] contents = new ItemStack[lim];
             
-            if (!contentPane.isHidden()) {
-                contentPane.draw(buffer);
-                //System.out.println("drawing "+x+", "+y+": "+icon.getStack().getType());
-                for (int i = 0; i < lim; i++) {
-                    Icon icon = buffer.get(i);
-                    if (icon != null)
-                        contents[i] = icon.getStack();
+            try {
+                if (!contentPane.isHidden()) {
+                    contentPane.draw(buffer);
+                    //System.out.println("drawing "+x+", "+y+": "+icon.getStack().getType());
+                    for (int i = 0; i < lim; i++) {
+                        Icon icon = buffer.get(i);
+                        if (icon != null)
+                            contents[i] = icon.getStack();
+                    }
                 }
+            } catch (Exception ex) {
+                throw new DrawException(ex);
             }
             inventory.setContents(contents);
         }
-        else for (View view : invalid) {
-            //System.out.println("is invalidated: " + view);
-            if (view.isInvalidated() && !view.getParent().isInvalidated()) {
-                //System.out.println("drawing invalidated: " + view);
-                final int
-                    vx = view.getX(),
-                    vy = view.getY(),
-                    vw = view.getWidth(),
-                    vh = view.getHeight();
-                IconBuffer viewBuffer = new IconBuffer(vw, vh);
-                //buffer.setOffset(view.getX(), view.getY());
-                //System.out.println("set offset in buffer to: "+view.getX()+", "+view.getY());
-                view.draw(viewBuffer);
-                for (int x = 0; x < vw; x++) {
-                    for (int y = 0; y < vh; y++) {
-                        setIcon(vx + x, vy + y, viewBuffer.get(x, y));
+        else try {
+            for (View view : invalid) {
+                //System.out.println("is invalidated: " + view);
+                if (view.isInvalidated() && !view.getParent().isInvalidated()) {
+                    //System.out.println("drawing invalidated: " + view);
+                    final int
+                        vx = view.getX(),
+                        vy = view.getY(),
+                        vw = view.getWidth(),
+                        vh = view.getHeight();
+                    IconBuffer viewBuffer = new IconBuffer(vw, vh);
+                    //buffer.setOffset(view.getX(), view.getY());
+                    //System.out.println("set offset in buffer to: "+view.getX()+", "+view.getY());
+                    view.draw(viewBuffer);
+                    for (int x = 0; x < vw; x++) {
+                        for (int y = 0; y < vh; y++) {
+                            setIcon(vx + x, vy + y, viewBuffer.get(x, y));
+                        }
                     }
                 }
+                //System.out.println(ANSI.FG_CYAN + "validating " + view + ANSI.FG_RESET);
+                //view.setValidated(true);
             }
-            //System.out.println(ANSI.FG_CYAN + "validating " + view + ANSI.FG_RESET);
-            //view.setValidated(true);
+        } catch (Exception ex) {
+            throw new DrawException(ex);
         }
         
         /*
@@ -212,6 +233,7 @@ public class Menu {
             inventory.setItem(x + y * width, icon.getStack());
         });
         */
+        drawing = false;
         invalid.clear();
     }
     
@@ -223,7 +245,17 @@ public class Menu {
      * @param view the view
      */
     public void invalidate(@NotNull View view) {
+        if (drawing)
+            throw new ConcurrentModificationException("tried to invalidate " + view + " during a draw call");
         this.invalid.add(view);
+    }
+    
+    /**
+     * Forcefully re-validates this menu and all views in it.
+     */
+    public void revalidate() {
+        this.invalid.forEach(View::revalidate);
+        this.invalid.clear();
     }
     
     /**

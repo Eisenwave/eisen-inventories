@@ -7,10 +7,14 @@ import eisenwave.inv.view.ViewGroup;
 import eisenwave.inv.view.ViewSize;
 import net.grian.spatium.util.Incrementer2;
 import net.grian.spatium.util.PrimMath;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
 
 public class SimpleList<T extends View> extends ViewGroup<T> {
     
+    private View[] toDraw;
     private boolean horizontal = true;
     private int offset = 0;
     
@@ -65,10 +69,10 @@ public class SimpleList<T extends View> extends ViewGroup<T> {
     
     /**
      * Increases or decreases the offset by a given amount of rows.
-     *
+     * <p>
      * Scrolling by <b>N</b> pages will result in scrolling by an amount of elements equal to:
      * <blockquote>
-     *     <code><b>N</b> * (width if horizontal, else height)</code>
+     * <code><b>N</b> * (width if horizontal, else height)</code>
      * </blockquote>
      *
      * @param count the row count
@@ -80,10 +84,10 @@ public class SimpleList<T extends View> extends ViewGroup<T> {
     
     /**
      * Increases or decreases the offset by a given amount of pages.
-     *
+     * <p>
      * Scrolling by <b>N</b> pages will result in scrolling by an amount of elements equal to:
      * <blockquote>
-     *     <code><b>N</b> * width * height</code>
+     * <code><b>N</b> * width * height</code>
      * </blockquote>
      *
      * @param count the page count
@@ -93,24 +97,33 @@ public class SimpleList<T extends View> extends ViewGroup<T> {
     }
     
     @Override
-    protected void drawContent(IconBuffer buffer) {
+    public void prepareDraw() {
         Incrementer2 incr = horizontal?
             new Incrementer2(getWidth(), getHeight()) :
             new Incrementer2(getHeight(), getWidth());
-        View[] toDraw = children.toArray(new View[children.size()]);
         
-        for (int i = offset; i < toDraw.length; i++) {
+        toDraw = children.toArray(new View[children.size()]);
+        toDraw = Arrays.copyOfRange(toDraw, offset, Math.min(toDraw.length, offset + getArea()));
+        
+        for (int i = 0; i < toDraw.length && incr.canIncrement(); i++) {
             View child = toDraw[i];
-            if (!incr.canIncrement()) break;
             int[] xy = incr.getAndIncrement();
             int x = horizontal? xy[0] : xy[1],
                 y = horizontal? xy[1] : xy[0];
-    
+            
             child.setPosition(x, y);
+        }
+        
+        //Bukkit.broadcastMessage(offset + " " + toDraw.length);
+    }
+    
+    @Override
+    protected void drawContent(IconBuffer buffer) {
+        for (View child : toDraw) {
             if (!child.isHidden()) {
-                IconBuffer childBuffer = new IconBuffer(1, 1);
+                IconBuffer childBuffer = new IconBuffer(child.getWidth(), child.getHeight());
                 child.draw(childBuffer);
-                buffer.set(x, y, childBuffer);
+                buffer.set(child.getRelX(), child.getRelY(), childBuffer);
             }
             child.revalidate();
         }
