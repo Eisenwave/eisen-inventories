@@ -2,6 +2,7 @@ package eisenwave.inv.cmd;
 
 import eisenwave.inv.menu.Menu;
 import eisenwave.inv.menu.MenuManager;
+import eisenwave.inv.menu.MenuSession;
 import eisenwave.inv.view.ViewSize;
 import eisenwave.inv.widget.*;
 import org.bukkit.Bukkit;
@@ -11,7 +12,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class InvTestCommand implements CommandExecutor {
+public class CmdInvTest implements CommandExecutor {
     
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -21,14 +22,14 @@ public class InvTestCommand implements CommandExecutor {
             case "open": {
                 Player player = (Player) sender;
                 Menu menu = new TestMenu();
-                
-                menu.showTo(player);
+                MenuManager.getInstance().startSession(player, menu);
                 return true;
             }
             
             case "list": {
-                sender.sendMessage("amount of menus: "+MenuManager.getInstance().getMenus().size());
-                MenuManager.getInstance().getMenus()
+                sender.sendMessage("amount of menus: "+MenuManager.getInstance().getSessions().size());
+                MenuManager.getInstance().getSessions().stream()
+                    .map(MenuSession::getMenu)
                     .forEach(menu -> sender.sendMessage(menu.getTitle()+" "+menu.getWidth()+"x"+menu.getHeight()));
             }
         }

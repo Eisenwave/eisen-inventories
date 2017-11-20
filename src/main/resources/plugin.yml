@@ -2,7 +2,17 @@ name: EisenInventories
 main: eisenwave.inv.EisenInventoriesPlugin
 version: 0.1
 
+permissions:
+  eisen.inv:
+    invtest:
+      default: op
+    cancelquery:
+      default: true
+
 commands:
   invtest:
     usage: "/invtest"
-    permission: eiseninv.invtest
+    permission: eisen.inv.invtest
+  cancelquery:
+    usage: "/cancelquery"
+    permission: eisen.inv.cancelquery

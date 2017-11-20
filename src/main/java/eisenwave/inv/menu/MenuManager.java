@@ -1,7 +1,9 @@
 package eisenwave.inv.menu;
 
 import eisenwave.inv.error.DrawException;
-import org.bukkit.Bukkit;
+import eisenwave.inv.error.MissingSessionException;
+import eisenwave.inv.query.Query;
+import nl.klikenklaar.util.gui.buttons.Button;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,7 +14,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 public final class MenuManager implements Listener {
     
@@ -26,21 +27,25 @@ public final class MenuManager implements Listener {
     
     private MenuManager() {}
     
-    private final Map<HumanEntity, Menu> menuMap = new HashMap<>();
+    private final Map<HumanEntity, MenuSession> sessionMap = new HashMap<>();
     //private final Collection<Menu> menus = new HashSet<>();
     
     // EVENTS & TICK
     
     public void onTick() {
-        DrawTask task = new DrawTask();
-        menuMap.values().parallelStream().forEach(task);
+        sessionMap.values().parallelStream().forEach(session -> {
+            if (!session.isQueried())
+                drawSilently(session.getMenu());
+        });
     }
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInteract(InventoryClickEvent event) {
         //Bukkit.broadcastMessage("interacting on primary? "+Bukkit.getServer().isPrimaryThread());
-        Menu menu = menuMap.get(event.getWhoClicked());
-        if (menu == null || !menu.isInteractable()) return;
+        MenuSession session = sessionMap.get(event.getWhoClicked());
+        if (session == null || session.isQueried()) return;
+        Menu menu = session.getMenu();
+        if (!menu.isInteractable()) return;
         
         int slot = event.getSlot();
         if (event.getRawSlot() != slot || event.getSlot() < 0) {
@@ -57,52 +62,156 @@ public final class MenuManager implements Listener {
         menu.setInteractable(false);
         event.setCancelled(true);
         
-        player.sendMessage(response.name());
+        //player.sendMessage(response.name());
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onClose(InventoryCloseEvent event) {
         Player player = (Player) event.getPlayer();
-        Menu menu = menuMap.remove(player);
-        if (menu != null)
-            menu.performClose(player);
+        if (hasSession(player)) {
+            MenuSession session = getSession(player);
+            if (!session.isQueried()) {
+                Menu menu = session.getMenu();
+                menu.performClose(player);
+                sessionMap.remove(player);
+            }
+        }
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        Menu menu = menuMap.remove(player);
-        if (menu != null)
-            menu.performClose(player);
+        endSession(player);
+    }
+    
+    /**
+     * Called when the server shuts down.
+     * <p>
+     * This will close all sessions and fail all queries.
+     */
+    public void onStop() {
+        sessionMap.forEach((human, session) -> closeSession((Player) human, session));
     }
     
     // ACTIONS
     
-    public void openMenu(HumanEntity human, Menu menu) {
-        menuMap.put(human, menu);
+    /**
+     * Starts a new {@link MenuSession}.
+     *
+     * @param human the human
+     * @param menu the menu
+     */
+    public void startSession(HumanEntity human, Menu menu) {
+        if (hasSession(human)) {
+            closeSession((Player) human, getSession(human));
+        }
+        sessionMap.put(human, new MenuSession(menu));
+        menu.showTo((Player) human);
+    }
+    /**
+     * Ends the {@link MenuSession} of a player if such a session exists.
+     *
+     * @param human the human
+     */
+    public void endSession(HumanEntity human) {
+        if (hasSession(human)) {
+            MenuSession session = getSession(human);
+            closeSession((Player) human, session);
+            sessionMap.remove(human);
+        }
+    }
+    
+    /**
+     * Queries a player.
+     *
+     * @param human the human
+     * @param query the query
+     */
+    public void startQuery(HumanEntity human, Query query) {
+        if (hasSession(human)) {
+            MenuSession session = getSession(human);
+            if (session.isQueried())
+                session.getQuery().onFail((Player) human);
+            session.setQuery(query);
+            human.closeInventory();
+        } else {
+            throw new MissingSessionException("human has no session that could be queried");
+        }
+    }
+    
+    /**
+     * Stops a player query.
+     *
+     * @param human the human
+     */
+    public void endQuery(HumanEntity human) {
+        if (hasSession(human)) {
+            MenuSession session = getSession(human);
+            session.setQuery(null);
+            session.getMenu().showTo((Player) human);
+        } else {
+            throw new MissingSessionException("human has no session that could be queried");
+        }
     }
     
     // GETTERS
     
-    public Collection<Menu> getMenus() {
-        return Collections.unmodifiableCollection(menuMap.values());
+    /**
+     * Returns an immutable collection of all {@link MenuSession}s.
+     *
+     * @return all menu sessions
+     */
+    public Collection<MenuSession> getSessions() {
+        return Collections.unmodifiableCollection(sessionMap.values());
+    }
+    
+    /**
+     * Returns whether the human has a {@link MenuSession}.
+     *
+     * @param human the human
+     * @return whether the human has a session
+     */
+    public boolean hasSession(HumanEntity human) {
+        return sessionMap.containsKey(human);
+    }
+    
+    /**
+     * Returns the session of the human or {@code null} if there is none.
+     *
+     * @param human the human
+     * @return whether the human has a session
+     */
+    public MenuSession getSession(HumanEntity human) {
+        return sessionMap.get(human);
     }
     
     // UTIL
     
-    private static class DrawTask implements Consumer<Menu> {
-        
-        @Override
-        public void accept(Menu menu) {
-            try {
-                menu.draw();
-            } catch (DrawException ex) {
-                menu.revalidate();
-                ex.printStackTrace();
-            }
-            menu.setInteractable(true);
+    /**
+     * Fails the query of a session and invokes {@link Menu#performClose(Player)} for the given menu.
+     *
+     * @param player the player
+     * @param session the session
+     */
+    private static void closeSession(Player player, MenuSession session) {
+        if (session.isQueried())
+            session.getQuery().onFail(player);
+        session.getMenu().performClose(player);
+    }
+    
+    /**
+     * Draws a menu and handles any {@link DrawException}s.
+     *
+     * @param menu the menu to draw
+     */
+    private static void drawSilently(Menu menu) {
+        try {
+            menu.draw();
+        } catch (DrawException ex) {
+            menu.revalidate();
+            ex.printStackTrace();
         }
-        
+        menu.setInteractable(true);
     }
     
     

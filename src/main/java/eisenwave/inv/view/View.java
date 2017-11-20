@@ -235,7 +235,7 @@ public abstract class View implements Redrawable {
      * @param action the action to perform
      */
     public MenuResponse performAction(Player player, ViewAction action) {
-        return MenuResponse.EMPTY;
+        return MenuResponse.BLOCK;
     }
     
     // DRAWABLE IMPL
@@ -245,6 +245,12 @@ public abstract class View implements Redrawable {
         if (!isHidden())
             drawContent(buffer);
         revalidate();
+    }
+    
+    public IconBuffer draw() {
+        IconBuffer buffer = new IconBuffer(getWidth(), getHeight());
+        draw(buffer);
+        return buffer;
     }
     
     @Override

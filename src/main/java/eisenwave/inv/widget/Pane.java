@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class Pane extends Widget {
     
-    private final ItemStack item;
+    private ItemStack item;
     
     public Pane(@NotNull Menu menu, @Nullable Stylesheet style) {
         super(menu, new Style(style));
@@ -30,6 +30,13 @@ public class Pane extends Widget {
      */
     public ItemStack getItem() {
         return item.clone();
+    }
+    
+    /**
+     * Sets this pane's item.
+     */
+    public void setItem(@NotNull ItemStack item) {
+        this.item = item;
     }
     
     private static class Style extends Stylesheet {

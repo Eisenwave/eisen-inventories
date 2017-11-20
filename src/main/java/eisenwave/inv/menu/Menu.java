@@ -160,8 +160,18 @@ public class Menu {
         }
     }
     
+    /**
+     * Called from the outside when the player closes this menu.
+     *
+     * @param player the player
+     */
     public void performClose(Player player) {}
     
+    /**
+     * Called from the outside when the player opens this menu.
+     *
+     * @param player the player
+     */
     public void performOpen(Player player) {}
     
     /**
@@ -276,15 +286,15 @@ public class Menu {
      */
     public void showTo(Player viewer) {
         viewer.openInventory(inventory);
-        MenuManager.getInstance().openMenu(viewer, this);
     }
     
-    // UTIL
+    // BUFFER UTIL
     
     private void setIcon(int x, int y, @Nullable Icon icon) {
         //System.out.println(x + " " + y + " -> " + icon);
         buffer.set(x, y, icon);
-        inventory.setItem(x + y * width, icon == null? null : icon.getStack());
+        ItemStack item = icon == null? null : icon.getStack();
+        inventory.setItem(x + y * width, item);
     }
     
     private void clearBuffer() {

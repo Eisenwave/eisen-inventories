@@ -5,6 +5,7 @@ import eisenwave.inv.style.Stylesheet;
 import eisenwave.inv.view.View;
 import eisenwave.inv.view.ViewSize;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class Widget extends View {
     
@@ -17,7 +18,7 @@ public abstract class Widget extends View {
      * @param style the style of this view
      * @see Menu#getContentPane()
      */
-    protected Widget(Menu menu, @NotNull ViewSize size, @NotNull Stylesheet style) {
+    protected Widget(Menu menu, @NotNull ViewSize size, @Nullable Stylesheet style) {
         super(menu.getContentPane(), menu, size);
         this.style = style;
     }
@@ -29,7 +30,7 @@ public abstract class Widget extends View {
      * @param style the style of this view
      * @see Menu#getContentPane()
      */
-    protected Widget(Menu menu, @NotNull Stylesheet style) {
+    protected Widget(Menu menu, @Nullable Stylesheet style) {
         super(menu);
         this.style = style;
     }
@@ -39,7 +40,6 @@ public abstract class Widget extends View {
      *
      * @return the style
      */
-    @NotNull
     protected Stylesheet getStyle() {
         return style;
     }
