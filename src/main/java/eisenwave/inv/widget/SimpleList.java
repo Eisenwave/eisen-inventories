@@ -7,7 +7,6 @@ import eisenwave.inv.view.ViewGroup;
 import eisenwave.inv.view.ViewSize;
 import net.grian.spatium.util.Incrementer2;
 import net.grian.spatium.util.PrimMath;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -97,13 +96,27 @@ public class SimpleList<T extends View> extends ViewGroup<T> {
     }
     
     @Override
+    public void clearChildren() {
+        super.clearChildren();
+        this.offset = 0;
+    }
+    
+    @Override
     public void prepareDraw() {
+        if (children.isEmpty()) {
+            toDraw = null;
+            return;
+        }
+        
         Incrementer2 incr = horizontal?
             new Incrementer2(getWidth(), getHeight()) :
             new Incrementer2(getHeight(), getWidth());
+    
+        int size = children.size();
+        int adjOffset = Math.min(offset, size);
         
-        toDraw = children.toArray(new View[children.size()]);
-        toDraw = Arrays.copyOfRange(toDraw, offset, Math.min(toDraw.length, offset + getArea()));
+        toDraw = children.toArray(new View[size]);
+        toDraw = Arrays.copyOfRange(toDraw, adjOffset, Math.min(size, adjOffset + getArea()));
         
         for (int i = 0; i < toDraw.length && incr.canIncrement(); i++) {
             View child = toDraw[i];
@@ -119,6 +132,8 @@ public class SimpleList<T extends View> extends ViewGroup<T> {
     
     @Override
     protected void drawContent(IconBuffer buffer) {
+        if (toDraw == null) return;
+        
         for (View child : toDraw) {
             if (!child.isHidden()) {
                 IconBuffer childBuffer = new IconBuffer(child.getWidth(), child.getHeight());

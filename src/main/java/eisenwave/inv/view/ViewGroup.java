@@ -72,13 +72,12 @@ public abstract class ViewGroup<T extends View> extends View implements Iterable
     protected void drawContent(IconBuffer buffer) {
         for (View child : children) {
             //if (!child.isInvalidated()) continue;
-            System.out.println("drawing " + child.getClass().getSimpleName() + " inside view group");
+            //System.out.println("drawing " + child.getClass().getSimpleName() + " inside view group");
             if (!child.isHidden()) {
                 IconBuffer childBuffer = new IconBuffer(child.getWidth(), child.getHeight());
                 child.draw(childBuffer);
                 buffer.set(child.getRelX(), child.getRelY(), childBuffer);
             }
-            child.revalidate();
         }
     }
     

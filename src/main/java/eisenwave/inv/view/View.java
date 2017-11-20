@@ -37,6 +37,7 @@ public abstract class View implements Redrawable {
         this.parent = parent;
         this.menu = menu;
         this.size = size;
+        invalidate();
     }
     
     /**
@@ -244,7 +245,6 @@ public abstract class View implements Redrawable {
     public final void draw(IconBuffer buffer) {
         if (!isHidden())
             drawContent(buffer);
-        revalidate();
     }
     
     public IconBuffer draw() {
@@ -311,7 +311,7 @@ public abstract class View implements Redrawable {
      *
      * @param parent the parent
      */
-    protected void setParent(@NotNull View parent) {
+    public void setParent(@NotNull View parent) {
         this.parent = parent;
     }
     
@@ -361,7 +361,13 @@ public abstract class View implements Redrawable {
     
     @Override
     public String toString() {
-        return getClass().getSimpleName();
+        String path;
+        if (getParent() != this)
+            path = getParent().toString() + " / " + getClass().getSimpleName();
+        else
+            path = getClass().getSimpleName();
+        
+        return invalidated? path + "?" : path;
     }
     
 }

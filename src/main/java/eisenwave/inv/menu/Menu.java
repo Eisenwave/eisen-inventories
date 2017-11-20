@@ -174,6 +174,8 @@ public class Menu {
      */
     public void performOpen(Player player) {}
     
+    private static int drawCallNo = 1;
+    
     /**
      * Draws the menu into its inventory.
      *
@@ -181,6 +183,7 @@ public class Menu {
      */
     public void draw() {
         if (invalid.isEmpty()) return;
+        System.out.println("DRAW_CALL_NO = "+drawCallNo++);
         
         for (View view : invalid.toArray(new View[invalid.size()]))
             view.prepareDraw();
@@ -190,7 +193,7 @@ public class Menu {
         drawing = true;
         
         if (contentPane.isInvalidated()) {
-            //System.out.println("drawing: "+contentPane.getClass().getSimpleName());
+            System.out.println("DRAW "+contentPane);
             clearBuffer();
             int lim = buffer.getSize();
             ItemStack[] contents = new ItemStack[lim];
@@ -207,14 +210,18 @@ public class Menu {
                 }
             } catch (Exception ex) {
                 throw new DrawException(ex);
+            } finally {
+                drawing = false;
+                inventory.setContents(contents);
+                invalid.forEach(View::revalidate);
+                invalid.clear();
             }
-            inventory.setContents(contents);
         }
         else try {
             for (View view : invalid) {
                 //System.out.println("is invalidated: " + view);
                 if (view.isInvalidated() && !view.getParent().isInvalidated()) {
-                    //System.out.println("drawing invalidated: " + view);
+                    System.out.println("DRAW "+view);
                     final int
                         vx = view.getX(),
                         vy = view.getY(),
@@ -235,6 +242,10 @@ public class Menu {
             }
         } catch (Exception ex) {
             throw new DrawException(ex);
+        } finally {
+            drawing = false;
+            invalid.forEach(View::revalidate);
+            invalid.clear();
         }
         
         /*
@@ -243,8 +254,7 @@ public class Menu {
             inventory.setItem(x + y * width, icon.getStack());
         });
         */
-        drawing = false;
-        invalid.clear();
+        
     }
     
     // INVALIDATION
