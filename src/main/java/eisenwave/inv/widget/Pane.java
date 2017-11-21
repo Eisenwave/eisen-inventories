@@ -11,6 +11,11 @@ public class Pane extends Widget {
     
     private ItemStack item;
     
+    public Pane(@NotNull Menu menu, @NotNull ViewSize size, @Nullable Stylesheet style) {
+        super(menu, size, new Style(style));
+        this.item = getStyle().getItem("pane.item");
+    }
+    
     public Pane(@NotNull Menu menu, @Nullable Stylesheet style) {
         super(menu, new Style(style));
         this.item = getStyle().getItem("pane.item");

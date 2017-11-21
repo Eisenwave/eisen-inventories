@@ -1,5 +1,6 @@
 package eisenwave.inv.cmd;
 
+import eisenwave.inv.EisenInventoriesPlugin;
 import eisenwave.inv.menu.Menu;
 import eisenwave.inv.menu.MenuManager;
 import eisenwave.inv.menu.MenuSession;
@@ -12,7 +13,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CmdInvTest implements CommandExecutor {
+public class CmdInvTest extends EisenInvCommand {
+    
+    public CmdInvTest(EisenInventoriesPlugin plugin) {
+        super(plugin, "invtest");
+    }
     
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

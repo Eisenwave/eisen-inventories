@@ -14,6 +14,8 @@ import java.util.*;
 
 public class Menu {
     
+    public final static int MAX_SIZE = 54;
+    
     private boolean interactable = true;
     
     private final static int WIDTH = 9;
@@ -58,7 +60,7 @@ public class Menu {
      * Constructs a new menu which with maximum size.
      */
     public Menu(@Nullable String title) {
-        this(54, title);
+        this(MAX_SIZE, title);
     }
     
     /**

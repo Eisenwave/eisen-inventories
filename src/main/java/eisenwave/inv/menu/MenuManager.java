@@ -1,8 +1,10 @@
 package eisenwave.inv.menu;
 
+import eisenwave.inv.EisenInventoriesPlugin;
 import eisenwave.inv.error.DrawException;
 import eisenwave.inv.error.MissingSessionException;
 import eisenwave.inv.query.Query;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -10,6 +12,7 @@ import org.bukkit.event.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -108,10 +111,12 @@ public final class MenuManager implements Listener {
     public void startSession(@NotNull HumanEntity human, @NotNull Menu menu) {
         if (hasSession(human)) {
             closeSession((Player) human, getSession(human));
+            human.closeInventory();
         }
         sessionMap.put(human, new MenuSession(menu));
         menu.showTo((Player) human);
     }
+    
     /**
      * Ends the {@link MenuSession} of a player if such a session exists.
      *
@@ -121,6 +126,7 @@ public final class MenuManager implements Listener {
         if (hasSession(human)) {
             MenuSession session = getSession(human);
             closeSession((Player) human, session);
+            human.closeInventory();
             sessionMap.remove(human);
         }
     }
@@ -138,7 +144,8 @@ public final class MenuManager implements Listener {
                 session.getQuery().onFail((Player) human);
             session.setQuery(query);
             human.closeInventory();
-        } else {
+        }
+        else {
             throw new MissingSessionException("human has no session that could be queried");
         }
     }
@@ -153,7 +160,8 @@ public final class MenuManager implements Listener {
             MenuSession session = getSession(human);
             session.setQuery(null);
             session.getMenu().showTo((Player) human);
-        } else {
+        }
+        else {
             throw new MissingSessionException("human has no session that could be queried");
         }
     }
@@ -218,5 +226,9 @@ public final class MenuManager implements Listener {
         menu.setInteractable(true);
     }
     
+    private static void runTask(Runnable task) {
+        Plugin plugin = EisenInventoriesPlugin.getInstance();
+        plugin.getServer().getScheduler().runTask(plugin, task);
+    }
     
 }
