@@ -15,7 +15,7 @@ import java.util.function.Consumer;
  * Adding {@link View}s to this object will result in them being hidden, drawn and invalidated in sync with their
  * parent.
  */
-public abstract class ViewGroup<T extends View> extends View implements Iterable<T> {
+public class ViewGroup<T extends View> extends View implements Iterable<T> {
     
     protected final List<T> children = new ArrayList<>();
     
@@ -23,8 +23,12 @@ public abstract class ViewGroup<T extends View> extends View implements Iterable
         super(parent, menu, size);
     }
     
+    public ViewGroup(@NotNull Menu menu, @NotNull ViewSize size) {
+        this(menu.getContentPane(), menu, size);
+    }
+    
     public ViewGroup(@NotNull Menu menu) {
-        this(menu.getContentPane(), menu, new ViewSize(ViewSize.MATCH_PARENT, ViewSize.MATCH_PARENT));
+        this(menu, new ViewSize(ViewSize.MATCH_PARENT, ViewSize.MATCH_PARENT));
     }
     
     public ViewGroup(@NotNull View parent) {
