@@ -3,7 +3,7 @@ package eisenwave.inv.menu;
 import eisenwave.inv.error.DrawException;
 import eisenwave.inv.error.MissingSessionException;
 import eisenwave.inv.query.Query;
-import nl.klikenklaar.util.gui.buttons.Button;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -39,10 +40,13 @@ public final class MenuManager implements Listener {
         });
     }
     
+    private final static String ERROR_MESSAGE = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "Error";
+    
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInteract(InventoryClickEvent event) {
         //Bukkit.broadcastMessage("interacting on primary? "+Bukkit.getServer().isPrimaryThread());
-        MenuSession session = sessionMap.get(event.getWhoClicked());
+        HumanEntity human = event.getWhoClicked();
+        MenuSession session = sessionMap.get(human);
         if (session == null || session.isQueried()) return;
         Menu menu = session.getMenu();
         if (!menu.isInteractable()) return;
@@ -55,14 +59,16 @@ public final class MenuManager implements Listener {
             return;
         }
         
-        //Bukkit.broadcastMessage( event.getSlotType().toString() + " " + event.getSlot() + " " + event.getRawSlot());
-        Player player = (Player) event.getWhoClicked();
         int x = slot % menu.getWidth(), y = slot / menu.getWidth();
-        MenuResponse response = menu.performClick(player, x, y, event.getClick());
-        menu.setInteractable(false);
-        event.setCancelled(true);
-        
-        //player.sendMessage(response.name());
+        try {
+            MenuResponse response = menu.performClick((Player) human, x, y, event.getClick());
+        } catch (Exception ex) {
+            human.sendMessage(ERROR_MESSAGE);
+            ex.printStackTrace();
+        } finally {
+            menu.setInteractable(false);
+            event.setCancelled(true);
+        }
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
@@ -101,7 +107,7 @@ public final class MenuManager implements Listener {
      * @param human the human
      * @param menu the menu
      */
-    public void startSession(HumanEntity human, Menu menu) {
+    public void startSession(@NotNull HumanEntity human, @NotNull Menu menu) {
         if (hasSession(human)) {
             closeSession((Player) human, getSession(human));
         }
@@ -113,7 +119,7 @@ public final class MenuManager implements Listener {
      *
      * @param human the human
      */
-    public void endSession(HumanEntity human) {
+    public void endSession(@NotNull HumanEntity human) {
         if (hasSession(human)) {
             MenuSession session = getSession(human);
             closeSession((Player) human, session);
@@ -127,7 +133,7 @@ public final class MenuManager implements Listener {
      * @param human the human
      * @param query the query
      */
-    public void startQuery(HumanEntity human, Query query) {
+    public void startQuery(@NotNull HumanEntity human, @NotNull Query query) {
         if (hasSession(human)) {
             MenuSession session = getSession(human);
             if (session.isQueried())
@@ -144,7 +150,7 @@ public final class MenuManager implements Listener {
      *
      * @param human the human
      */
-    public void endQuery(HumanEntity human) {
+    public void endQuery(@NotNull HumanEntity human) {
         if (hasSession(human)) {
             MenuSession session = getSession(human);
             session.setQuery(null);
