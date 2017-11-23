@@ -153,7 +153,7 @@ public class Menu {
         if (icon != null) {
             //System.out.println("clicked icon");
             View view = icon.getView();
-            System.out.println(click);
+            //System.out.println(click);
             return view.performAction(player, new ViewAction(ViewActionType.CLICK, click));
         }
         else {
@@ -176,7 +176,7 @@ public class Menu {
      */
     public void performOpen(Player player) {}
     
-    private static int drawCallNo = 1;
+    //private static int drawCallNo = 1;
     
     /**
      * Draws the menu into its inventory.
@@ -185,7 +185,7 @@ public class Menu {
      */
     public void draw() {
         if (invalid.isEmpty()) return;
-        System.out.println("DRAW_CALL_NO = "+drawCallNo++);
+        //System.out.println("DRAW_CALL_NO = "+drawCallNo++);
         
         for (View view : invalid.toArray(new View[invalid.size()]))
             view.prepareDraw();
@@ -195,7 +195,7 @@ public class Menu {
         drawing = true;
         
         if (contentPane.isInvalidated()) {
-            System.out.println("DRAW "+contentPane);
+            //System.out.println("DRAW "+contentPane);
             clearBuffer();
             int lim = buffer.getSize();
             ItemStack[] contents = new ItemStack[lim];
@@ -223,7 +223,7 @@ public class Menu {
             for (View view : invalid) {
                 //System.out.println("is invalidated: " + view);
                 if (view.isInvalidated() && !view.getParent().isInvalidated()) {
-                    System.out.println("DRAW "+view);
+                    //System.out.println("DRAW "+view);
                     final int
                         vx = view.getX(),
                         vy = view.getY(),

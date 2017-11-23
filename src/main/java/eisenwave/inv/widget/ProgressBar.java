@@ -10,13 +10,19 @@ import org.jetbrains.annotations.Nullable;
 
 public class ProgressBar extends Widget {
     
-    private final ItemStack onItem, offItem;
+    private ItemStack onItem, offItem;
     
     private boolean vertical = false;
     private float progress = 0F;
     
     public ProgressBar(@NotNull Menu menu, @Nullable Stylesheet style) {
         super(menu, new Style(style));
+        this.onItem = getStyle().getItem("progressbar.on");
+        this.offItem = getStyle().getItem("progressbar.off");
+    }
+    
+    public ProgressBar(@NotNull Menu menu, @NotNull ViewSize size, @Nullable Stylesheet style) {
+        super(menu, size, new Style(style));
         this.onItem = getStyle().getItem("progressbar.on");
         this.offItem = getStyle().getItem("progressbar.off");
     }
@@ -99,6 +105,14 @@ public class ProgressBar extends Widget {
      */
     public ItemStack getOffItem() {
         return offItem.clone();
+    }
+    
+    public void setOnItem(ItemStack item) {
+        this.onItem = item.clone();
+    }
+    
+    public void setOffItem(ItemStack item) {
+        this.offItem = item.clone();
     }
     
     private static class Style extends Stylesheet {

@@ -4,7 +4,6 @@ import eisenwave.inv.EisenInventoriesPlugin;
 import eisenwave.inv.error.DrawException;
 import eisenwave.inv.error.MissingSessionException;
 import eisenwave.inv.query.Query;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
