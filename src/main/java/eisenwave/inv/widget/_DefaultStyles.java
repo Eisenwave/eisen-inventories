@@ -1,29 +1,21 @@
 package eisenwave.inv.widget;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+
+import static eisenwave.inv.util.ItemInitUtil.*;
 
 final class _DefaultStyles {
     
     public final static ItemStack
-        BUTTON_ITEM = itemStack(Material.EMERALD, "&eButton"),
-        CHECKBOX_UNCHECKED = itemStack(Material.FIREWORK_CHARGE, "&8Unchecked"),
-        CHECKBOX_CHECKED = itemStack(Material.SLIME_BALL, "&aChecked"),
+        BUTTON_ITEM = create(Material.EMERALD, ChatColor.YELLOW + "Button"),
+        CHECKBOX_CHECKED = create(Material.SLIME_BALL, ChatColor.GREEN + "Checked"),
+        CHECKBOX_UNCHECKED = create(Material.FIREWORK_CHARGE, ChatColor.DARK_GRAY + "Unchecked"),
         DISPLAY_ITEM = new ItemStack(Material.PAPER),
-        RADIO_BUTTON_CHECKED = new ItemStack(Material.INK_SACK, 1, (short) 10),
-        RADIO_BUTTON_UNCHECKED = new ItemStack(Material.INK_SACK, 1, (short) 8),
-        PANE_ITEM = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 15),
+        RADIO_BUTTON_CHECKED = create(Material.INK_SACK, 1, (short) 10, ChatColor.GREEN + "Checked"),
+        RADIO_BUTTON_UNCHECKED = create(Material.INK_SACK, 1, (short) 8, ChatColor.DARK_GRAY + "Unchecked"),
+        PANE_ITEM = create(Material.STAINED_GLASS_PANE, 1, (short) 15, " "),
         PROGRESSBAR_ON = new ItemStack(Material.CONCRETE, 1, (short) 5),
         PROGRESSBAR_OFF = new ItemStack(Material.CONCRETE, 1, (short) 14);
-    
-    private static ItemStack itemStack(Material material, String colName) {
-        ItemStack result = new ItemStack(material);
-        ItemMeta meta = result.getItemMeta();
-        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', colName));
-        result.setItemMeta(meta);
-        return result;
-    }
     
 }

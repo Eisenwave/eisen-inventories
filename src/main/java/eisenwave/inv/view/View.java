@@ -315,6 +315,12 @@ public abstract class View implements Redrawable {
         this.parent = parent;
     }
     
+    /**
+     * Sets the width of this view.
+     *
+     * @param width the width
+     * @see ViewSize#setWidth(int)
+     */
     public void setWidth(int width) {
         if (!this.size.hasStaticWidth()) {
             this.size.setWidth(width);
@@ -323,6 +329,12 @@ public abstract class View implements Redrawable {
         }
     }
     
+    /**
+     * Sets the height of this view.
+     *
+     * @param height the height
+     * @see ViewSize#setHeight(int)
+     */
     public void setHeight(int height) {
         if (!this.size.hasStaticHeight()) {
             this.size.setHeight(height);
@@ -352,7 +364,7 @@ public abstract class View implements Redrawable {
      * @param hidden whether the element should be hidden
      */
     public void setHidden(boolean hidden) {
-        System.out.println("set " + getClass().getSimpleName() + " to hidden = " + hidden);
+        //System.out.println("set " + getClass().getSimpleName() + " to hidden = " + hidden);
         if (this.hidden != hidden) {
             this.hidden = hidden;
             this.invalidate();
