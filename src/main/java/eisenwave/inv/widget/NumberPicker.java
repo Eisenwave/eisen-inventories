@@ -1,8 +1,8 @@
 package eisenwave.inv.widget;
 
-import eisenwave.commons.util.PrimMath;
 import eisenwave.inv.menu.Menu;
 import eisenwave.inv.style.Stylesheet;
+import eisenwave.inv.util.EisenInvUtil;
 import eisenwave.inv.view.IconBuffer;
 import eisenwave.inv.view.ViewSize;
 import org.bukkit.inventory.ItemStack;
@@ -105,7 +105,7 @@ public class NumberPicker extends Widget {
      * @param number the number
      */
     public void setNumber(int number) {
-        number = PrimMath.clamp(min, number, max);
+        number = EisenInvUtil.clamp(min, number, max);
         if (this.number != number) {
             this.number = number;
             this.invalidate();

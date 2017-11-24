@@ -1,8 +1,8 @@
 package eisenwave.inv.widget;
 
-import eisenwave.commons.util.PrimMath;
 import eisenwave.inv.menu.Menu;
 import eisenwave.inv.style.Stylesheet;
+import eisenwave.inv.util.EisenInvUtil;
 import eisenwave.inv.view.*;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -53,7 +53,7 @@ public class ProgressBar extends Widget {
      * @param progress the progress
      */
     public void setProgress(float progress) {
-        this.progress = PrimMath.clamp01(progress);
+        this.progress = EisenInvUtil.clamp01(progress);
         this.invalidate();
     }
     

@@ -34,11 +34,6 @@
             <version>1.11-R1</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>me.eisenwave.commons</groupId>
-            <artifactId>eisen-commons</artifactId>
-            <version>1.0</version>
-        </dependency>
     </dependencies>
 
     <repositories>
