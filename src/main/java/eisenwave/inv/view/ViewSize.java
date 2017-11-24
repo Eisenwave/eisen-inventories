@@ -27,6 +27,15 @@ public class ViewSize {
         return new ViewSize(MIN_POS, MIN_POS, WRAP_CONTENT, WRAP_CONTENT);
     }
     
+    /**
+     * Returns a non-resizable, {@code 1 x 1} size.
+     *
+     * @return a 1x constant size
+     */
+    public static ViewSize singleton() {
+        return new ViewSize(1, 1, true, true);
+    }
+    
     private final boolean staticWidth, staticHeight;
     private int x, y, width, height;
     
