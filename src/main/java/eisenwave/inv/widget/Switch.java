@@ -16,6 +16,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * A switch is a widget which allows switching between multiple strings.
+ * <p>
+ * Left-clicking a switch picks the next option, right-clicking it picks the previous option.
+ */
 public class Switch extends Widget {
     
     public final static int X = -5 % 5;
