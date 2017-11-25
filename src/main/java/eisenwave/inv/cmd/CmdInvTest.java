@@ -52,12 +52,20 @@ public class CmdInvTest extends EisenInvCommand {
             getContentPane().addChild(pane);
     
             CheckBox checkBox = new CheckBox(this, null);
-            checkBox.setPosition(4, 2);
+            checkBox.setPosition(2, 2);
             checkBox.addCheckListener(event -> {
-                Bukkit.broadcastMessage(ChatColor.BLUE+"checked: "+event.isChecked());
+                event.getPlayer().sendMessage(ChatColor.BLUE + "checked: " + event.isChecked());
                 pane.setHidden(event.isChecked());
             });
             getContentPane().addChild(checkBox);
+    
+            NumberPicker picker = new NumberPicker(this, null);
+            picker.setPosition(4, 2);
+            getContentPane().addChild(picker);
+    
+            Switch s = new Switch(this, null, "Apple", "Orange", "Strawberry", "Grapefruit", "Pineapple", "Lemon");
+            s.setPosition(6, 2);
+            getContentPane().addChild(s);
     
             ProgressBar bar = new ProgressBar(this, null);
             bar.setPosition(0, 3);

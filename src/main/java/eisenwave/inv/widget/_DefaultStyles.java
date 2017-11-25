@@ -16,6 +16,8 @@ final class _DefaultStyles {
         RADIO_BUTTON_UNCHECKED = create(Material.INK_SACK, 1, (short) 8, ChatColor.DARK_GRAY + "Unchecked"),
         PANE_ITEM = create(Material.STAINED_GLASS_PANE, 1, (short) 15, " "),
         PROGRESSBAR_ON = new ItemStack(Material.CONCRETE, 1, (short) 5),
-        PROGRESSBAR_OFF = new ItemStack(Material.CONCRETE, 1, (short) 14);
+        PROGRESSBAR_OFF = new ItemStack(Material.CONCRETE, 1, (short) 14),
+        NUMBER_PICKER = create(Material.PRISMARINE_CRYSTALS, ChatColor.GREEN + "1"),
+        SWITCH = new ItemStack(Material.PAPER);
     
 }
