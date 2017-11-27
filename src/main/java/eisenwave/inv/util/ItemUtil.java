@@ -2,6 +2,7 @@ package eisenwave.inv.util;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
@@ -10,12 +11,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("unchecked")
-public final class ItemInitUtil {
+public final class ItemUtil {
     
-    private ItemInitUtil() {}
+    private ItemUtil() {}
     
     // CREATE
     
@@ -76,7 +78,7 @@ public final class ItemInitUtil {
         return item;
     }
     
-    // SET
+    // MUTATE
     
     /**
      * Sets the {@link #decodeInlineLore(String) inline lore} of the item.
@@ -86,25 +88,26 @@ public final class ItemInitUtil {
      * @return the given item stack
      */
     public static ItemStack setInlineLore(ItemStack stack, String lore) {
-        ItemMeta meta = stack.getItemMeta();
-        meta.setLore(decodeInlineLore(lore));
-        stack.setItemMeta(meta);
-        return stack;
+        return changeMeta(stack, meta -> meta.setLore(decodeInlineLore(lore)));
     }
     
     public static ItemStack setLore(ItemStack stack, String... lore) {
-        ItemMeta meta = stack.getItemMeta();
-        meta.setLore(Arrays.asList(lore));
-        stack.setItemMeta(meta);
-        return stack;
+        return changeMeta(stack, meta -> meta.setLore(Arrays.asList(lore)));
     }
     
     public static ItemStack setLore(ItemStack stack, String lore) {
-        ItemMeta meta = stack.getItemMeta();
-        meta.setLore(Collections.singletonList(lore));
-        stack.setItemMeta(meta);
-        return stack;
+        return changeMeta(stack, meta -> meta.setLore(Collections.singletonList(lore)));
     }
+    
+    public static ItemStack setName(ItemStack stack, String name) {
+        return changeMeta(stack, meta -> meta.setDisplayName(name));
+    }
+    
+    public static ItemStack addItemFlags(ItemStack stack, ItemFlag... flags) {
+        return changeMeta(stack, meta -> meta.addItemFlags(flags));
+    }
+    
+    // MUTATE & COPY
     
     /**
      * Returns a new item with the given {@link #decodeInlineLore(String) inline lore}.
@@ -125,15 +128,12 @@ public final class ItemInitUtil {
         return setLore(stack.clone(), lore);
     }
     
-    public static ItemStack setName(ItemStack stack, String name) {
-        ItemMeta meta = stack.getItemMeta();
-        meta.setDisplayName(name);
-        stack.setItemMeta(meta);
-        return stack;
-    }
-    
     public static ItemStack withName(ItemStack stack, String name) {
         return setName(stack.clone(), name);
+    }
+    
+    public static ItemStack withItemFlags(ItemStack item, ItemFlag... flags) {
+        return addItemFlags(item.clone(), flags);
     }
     
     // DECODE
@@ -153,6 +153,15 @@ public final class ItemInitUtil {
         return Arrays.stream(lore.split("\n"))
             .map(str -> ChatColor.translateAlternateColorCodes('&', str))
             .collect(Collectors.toList());
+    }
+    
+    // UTIL
+    
+    private static ItemStack changeMeta(ItemStack stack, Consumer<ItemMeta> action) {
+        ItemMeta meta = stack.getItemMeta();
+        action.accept(meta);
+        stack.setItemMeta(meta);
+        return stack;
     }
     
 }

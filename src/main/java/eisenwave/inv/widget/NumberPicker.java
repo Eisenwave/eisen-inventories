@@ -4,7 +4,7 @@ import eisenwave.inv.menu.Menu;
 import eisenwave.inv.menu.MenuResponse;
 import eisenwave.inv.style.Stylesheet;
 import eisenwave.inv.util.EisenInvUtil;
-import eisenwave.inv.util.ItemInitUtil;
+import eisenwave.inv.util.ItemUtil;
 import eisenwave.inv.view.*;
 import net.grian.spatium.util.PrimMath;
 import org.bukkit.ChatColor;
@@ -202,7 +202,7 @@ public class NumberPicker extends Widget {
     public void prepareDraw() {
         String name = ChatColor.GREEN.toString() + number;
         String suffix = number == min? " (min)" : number == max? " (max)" : "";
-        ItemInitUtil.setName(item, name + suffix);
+        ItemUtil.setName(item, name + suffix);
         
         if (isChangingStack())
             item.setAmount(PrimMath.clamp(1, number, 64));

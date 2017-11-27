@@ -5,6 +5,7 @@ import eisenwave.inv.menu.MenuResponse;
 import eisenwave.inv.widget.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This class represents the basic building block for user interface components. It is an abstraction of a visible and
@@ -31,7 +32,7 @@ public abstract class View implements Redrawable {
      * @param menu the menu
      * @see Menu#getContentPane()
      */
-    protected View(View parent, Menu menu, @NotNull ViewSize size) {
+    protected View(@Nullable View parent, @NotNull Menu menu, @NotNull ViewSize size) {
         if (parent == null && this != this.getParent())
             throw new NullPointerException("view must either be its own parent or be constructed with one");
         this.parent = parent;
@@ -44,10 +45,21 @@ public abstract class View implements Redrawable {
      * Constructs a new view.
      *
      * @param menu the menu
+     * @param size the size
+     * @see Menu#getContentPane()
+     */
+    protected View(@NotNull Menu menu, @NotNull ViewSize size) {
+        this(menu.getContentPane(), menu, size);
+    }
+    
+    /**
+     * Constructs a new view.
+     *
+     * @param menu the menu
      * @see Menu#getContentPane()
      */
     protected View(@NotNull Menu menu) {
-        this(menu.getContentPane(), menu, new ViewSize(ViewSize.MATCH_PARENT, ViewSize.MATCH_PARENT));
+        this(menu, new ViewSize(ViewSize.MATCH_PARENT, ViewSize.MATCH_PARENT));
     }
     
     /*

@@ -3,7 +3,7 @@ package eisenwave.inv.widget;
 import eisenwave.inv.menu.Menu;
 import eisenwave.inv.menu.MenuResponse;
 import eisenwave.inv.style.Stylesheet;
-import eisenwave.inv.util.ItemInitUtil;
+import eisenwave.inv.util.ItemUtil;
 import eisenwave.inv.view.*;
 import net.grian.spatium.util.PrimMath;
 import org.bukkit.ChatColor;
@@ -12,7 +12,6 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -176,9 +175,9 @@ public class Switch extends Widget {
             ChatColor color = index == i? ChatColor.WHITE : ChatColor.DARK_GRAY;
             lore[i] = color + options[i];
         }
-        
-        ItemInitUtil.setName(item, name);
-        ItemInitUtil.setLore(item, lore);
+    
+        ItemUtil.setName(item, name);
+        ItemUtil.setLore(item, lore);
         
         if (getChangeAmount())
             item.setAmount(PrimMath.clamp(1, index + 1, 64));

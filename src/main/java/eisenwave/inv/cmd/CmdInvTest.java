@@ -6,10 +6,8 @@ import eisenwave.inv.menu.MenuManager;
 import eisenwave.inv.menu.MenuSession;
 import eisenwave.inv.view.ViewSize;
 import eisenwave.inv.widget.*;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -36,10 +34,15 @@ public class CmdInvTest extends EisenInvCommand {
                 MenuManager.getInstance().getSessions().stream()
                     .map(MenuSession::getMenu)
                     .forEach(menu -> sender.sendMessage(menu.getTitle()+" "+menu.getWidth()+"x"+menu.getHeight()));
+                return true;
             }
-        }
+    
+            case "stuff": {
         
-        return true;
+            }
+    
+            default: return false;
+        }
     }
     
     private static class TestMenu extends Menu {

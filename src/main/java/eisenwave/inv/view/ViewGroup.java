@@ -3,9 +3,7 @@ package eisenwave.inv.view;
 import eisenwave.inv.menu.Menu;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
