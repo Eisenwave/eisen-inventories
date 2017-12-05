@@ -23,15 +23,20 @@
 
     <dependencies>
         <dependency>
-            <groupId>net.grian.spatium</groupId>
-            <artifactId>spatium-util</artifactId>
-            <version>0.1</version>
-            <scope>provided</scope>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>15.0</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
             <version>1.12.2-R0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>eisenwave.spatium</groupId>
+            <artifactId>spatium-util</artifactId>
+            <version>0.1</version>
         </dependency>
     </dependencies>
 
