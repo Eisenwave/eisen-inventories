@@ -5,8 +5,8 @@ import eisenwave.inv.view.IconBuffer;
 import eisenwave.inv.view.View;
 import eisenwave.inv.view.ViewGroup;
 import eisenwave.inv.view.ViewSize;
-import net.grian.spatium.util.Incrementer2;
-import net.grian.spatium.util.PrimMath;
+import eisenwave.spatium.util.Incrementer2;
+import eisenwave.spatium.util.PrimMath;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;

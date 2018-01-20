@@ -5,7 +5,7 @@ import eisenwave.inv.menu.MenuResponse;
 import eisenwave.inv.style.Stylesheet;
 import eisenwave.inv.util.ItemUtil;
 import eisenwave.inv.view.*;
-import net.grian.spatium.util.PrimMath;
+import eisenwave.spatium.util.PrimMath;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -21,8 +21,6 @@ import java.util.List;
  * Left-clicking a switch picks the next option, right-clicking it picks the previous option.
  */
 public class Switch extends Widget {
-    
-    public final static int X = -5 % 5;
     
     private ItemStack item = _DefaultStyles.SWITCH;
     

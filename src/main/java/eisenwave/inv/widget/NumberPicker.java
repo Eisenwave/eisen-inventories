@@ -6,7 +6,7 @@ import eisenwave.inv.style.Stylesheet;
 import eisenwave.inv.util.EisenInvUtil;
 import eisenwave.inv.util.ItemUtil;
 import eisenwave.inv.view.*;
-import net.grian.spatium.util.PrimMath;
+import eisenwave.spatium.util.PrimMath;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;

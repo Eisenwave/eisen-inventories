@@ -51,8 +51,6 @@ public abstract class ChatQuery implements Query<String> {
             .create();
         
         player.spigot().sendMessage(msg);
-        
-        
     }
     
 }
