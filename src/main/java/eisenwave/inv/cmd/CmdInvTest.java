@@ -7,9 +7,11 @@ import eisenwave.inv.menu.MenuSession;
 import eisenwave.inv.view.ViewSize;
 import eisenwave.inv.widget.*;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class CmdInvTest extends EisenInvCommand {
     
@@ -25,6 +27,13 @@ public class CmdInvTest extends EisenInvCommand {
             case "open": {
                 Player player = (Player) sender;
                 Menu menu = new TestMenu();
+                MenuManager.getInstance().startSession(player, menu);
+                return true;
+            }
+    
+            case "ilist": {
+                Player player = (Player) sender;
+                Menu menu = new InlineListTestMenu();
                 MenuManager.getInstance().startSession(player, menu);
                 return true;
             }
@@ -81,6 +90,22 @@ public class CmdInvTest extends EisenInvCommand {
                 radios.addChild(new RadioButton(this, null));
             radios.setPosition(1, 5);
             getContentPane().addChild(radios);
+        }
+        
+    }
+    
+    private static class InlineListTestMenu extends Menu {
+        
+        public InlineListTestMenu() {
+            super(ChatColor.BOLD + "Test");
+            
+            InlineList<Display> list = new InlineList<>(this, new ViewSize(1, 1, 7, ViewSize.WRAP_CONTENT), null);
+            for (int i = 1; i <= 64; i++) {
+                Display display = new Display(this, null);
+                display.setItem(new ItemStack(Material.GRASS, i));
+                list.addChild(display);
+            }
+            getContentPane().addChild(list);
         }
         
     }
