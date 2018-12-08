@@ -5,6 +5,7 @@ import eisenwave.inv.cmd.CmdInvTest;
 import eisenwave.inv.cmd.EisenInvCommand;
 import eisenwave.inv.menu.MenuManager;
 import eisenwave.inv.query.QueryListener;
+import eisenwave.inv.util.LegacyUtil;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,6 +25,8 @@ public class EisenInventoriesPlugin extends JavaPlugin {
         
         initEvents();
         initCommands();
+    
+        getLogger().info(LegacyUtil.isApi13()? "Running on 1.13+ API" : "Running on 1.12- API");
     }
     
     private void initEvents() {

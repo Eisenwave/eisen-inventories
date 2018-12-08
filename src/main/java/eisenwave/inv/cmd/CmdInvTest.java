@@ -6,6 +6,7 @@ import eisenwave.inv.menu.MenuManager;
 import eisenwave.inv.menu.MenuSession;
 import eisenwave.inv.view.ViewSize;
 import eisenwave.inv.widget.*;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -28,6 +29,12 @@ public class CmdInvTest extends EisenInvCommand {
                 Player player = (Player) sender;
                 Menu menu = new TestMenu();
                 MenuManager.getInstance().startSession(player, menu);
+                return true;
+            }
+    
+            case "version": {
+                sender.sendMessage("Version: " + Bukkit.getVersion());
+                sender.sendMessage("Bukkit-Version: " + Bukkit.getBukkitVersion());
                 return true;
             }
     

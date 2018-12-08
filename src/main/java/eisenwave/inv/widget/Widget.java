@@ -4,6 +4,7 @@ import eisenwave.inv.menu.Menu;
 import eisenwave.inv.style.Stylesheet;
 import eisenwave.inv.view.View;
 import eisenwave.inv.view.ViewSize;
+import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

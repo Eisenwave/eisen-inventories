@@ -22,48 +22,43 @@ public final class ItemUtil {
     // CREATE
     
     @NotNull
-    public static ItemStack create(Material material, String name) {
-        return create(material, 1, (short) 0, name, (List) null);
+    public static ItemStack create(String key) {
+        return LegacyUtil.createItemStack(key, 1);
     }
     
     @NotNull
-    public static ItemStack create(Material material, String name, List<String> lore) {
-        return create(material, 1, (short) 0, name, lore);
+    public static ItemStack create(String key, int count) {
+        return LegacyUtil.createItemStack(key, count);
     }
     
     @NotNull
-    public static ItemStack create(Material material, String name, String inlineLore) {
-        return create(material, 1, (short) 0, name, inlineLore);
+    public static ItemStack create(String key, String name) {
+        return create(key, 1, name, (List) null);
     }
     
     @NotNull
-    public static ItemStack create(Material material, int count, String name) {
-        return create(material, count, (short) 0, name, (List) null);
+    public static ItemStack create(String key, String name, String inlineLore) {
+        return create(key, 1, name, inlineLore);
     }
     
     @NotNull
-    public static ItemStack create(Material material, short damage, String name) {
-        return create(material, 1, damage, name, (List) null);
+    public static ItemStack create(String key, int count, String name) {
+        return create(key, count, name, (List) null);
     }
     
     @NotNull
-    public static ItemStack create(Material material, int count, short damage, @Nullable String name) {
-        return create(material, count, damage, name, (List) null);
-    }
-    
-    @NotNull
-    public static ItemStack create(Material material, int count, short damage,
+    public static ItemStack create(String key, int count,
                                    @Nullable String name,
                                    @Nullable String inlineLore) {
         List<String> lore = inlineLore == null? Collections.emptyList() : decodeInlineLore(inlineLore);
-        return create(material, count, damage, name, lore);
+        return create(key, count, name, lore);
     }
     
     @NotNull
-    public static ItemStack create(Material material, int count, short damage,
+    public static ItemStack create(String key, int count,
                                    @Nullable String name,
                                    @Nullable List<String> lore) {
-        ItemStack item = new ItemStack(material, count, damage);
+        ItemStack item = LegacyUtil.createItemStack(key, count);
         ItemMeta meta = item.getItemMeta();
         if (name != null)
             meta.setDisplayName(name);
@@ -79,6 +74,10 @@ public final class ItemUtil {
     }
     
     // MUTATE
+    
+    public static ItemStack hideAttributes(ItemStack stack) {
+        return changeMeta(stack, meta -> meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES));
+    }
     
     /**
      * Sets the {@link #decodeInlineLore(String) inline lore} of the item.

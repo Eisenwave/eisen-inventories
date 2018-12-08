@@ -55,7 +55,6 @@ public class CheckBox extends Widget implements Checkable {
     
     @Override
     public void performToggle(Player player) {
-        System.out.println("performing toggle");
         CheckEvent action = new CheckEvent(this, player, !checked);
         for (CheckListener listener : listeners)
             listener.onCheck(action);

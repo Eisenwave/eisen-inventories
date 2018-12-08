@@ -1,9 +1,7 @@
 package eisenwave.inv.widget;
 
 import eisenwave.inv.menu.Menu;
-import eisenwave.inv.view.IconBuffer;
-import eisenwave.inv.view.ViewGroup;
-import eisenwave.inv.view.View;
+import eisenwave.inv.view.*;
 import org.jetbrains.annotations.NotNull;
 
 public class GridViewGroup extends ViewGroup {
