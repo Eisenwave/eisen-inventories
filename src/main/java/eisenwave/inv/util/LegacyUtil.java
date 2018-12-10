@@ -31,7 +31,8 @@ public final class LegacyUtil {
             return new ItemStack(obj.getMaterial(), count, obj.getData());
         };
     
-    private final static LegacyUtil INSTANCE = new LegacyUtil("blocktable.csv");
+    @SuppressWarnings("SpellCheckingInspection")
+    private final static LegacyUtil INSTANCE = new LegacyUtil("blocktable_extended.csv");
     
     private final Set<MinecraftObject> blocks = new LinkedHashSet<>();
     private final Set<MinecraftObject> items = new LinkedHashSet<>();

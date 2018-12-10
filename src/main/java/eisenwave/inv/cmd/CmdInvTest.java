@@ -1,9 +1,6 @@
 package eisenwave.inv.cmd;
 
-import eisenwave.inv.EisenInventoriesPlugin;
-import eisenwave.inv.menu.Menu;
-import eisenwave.inv.menu.MenuManager;
-import eisenwave.inv.menu.MenuSession;
+import eisenwave.inv.menu.*;
 import eisenwave.inv.view.ViewSize;
 import eisenwave.inv.widget.*;
 import org.bukkit.Bukkit;
@@ -13,10 +10,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 public class CmdInvTest extends EisenInvCommand {
     
-    public CmdInvTest(EisenInventoriesPlugin plugin) {
+    public CmdInvTest(Plugin plugin) {
         super(plugin, "invtest");
     }
     

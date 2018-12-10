@@ -1,17 +1,15 @@
 package eisenwave.inv.cmd;
 
-import eisenwave.inv.EisenInventoriesPlugin;
 import eisenwave.inv.error.MissingSessionException;
 import eisenwave.inv.menu.MenuManager;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import org.bukkit.command.*;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.plugin.Plugin;
 
 public class CmdCancelQuery extends EisenInvCommand {
     
-    public CmdCancelQuery(EisenInventoriesPlugin plugin) {
+    public CmdCancelQuery(Plugin plugin) {
         super(plugin, "cancelquery");
     }
     

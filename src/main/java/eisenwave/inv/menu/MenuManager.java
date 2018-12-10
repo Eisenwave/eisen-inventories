@@ -1,6 +1,5 @@
 package eisenwave.inv.menu;
 
-import eisenwave.inv.EisenInventoriesPlugin;
 import eisenwave.inv.error.DrawException;
 import eisenwave.inv.error.MissingSessionException;
 import eisenwave.inv.query.Query;
@@ -11,7 +10,6 @@ import org.bukkit.event.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -223,11 +221,6 @@ public final class MenuManager implements Listener {
             ex.printStackTrace();
         }
         menu.setInteractable(true);
-    }
-    
-    private static void runTask(Runnable task) {
-        Plugin plugin = EisenInventoriesPlugin.getInstance();
-        plugin.getServer().getScheduler().runTask(plugin, task);
     }
     
 }
