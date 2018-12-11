@@ -37,6 +37,11 @@ public final class ItemUtil {
     }
     
     @NotNull
+    public static ItemStack create(Material mat, String name) {
+        return create(mat, 1, name, null);
+    }
+    
+    @NotNull
     public static ItemStack create(String key, String name, String inlineLore) {
         return create(key, 1, name, inlineLore);
     }
@@ -59,6 +64,25 @@ public final class ItemUtil {
                                    @Nullable String name,
                                    @Nullable List<String> lore) {
         ItemStack item = LegacyUtil.createItemStack(key, count);
+        ItemMeta meta = item.getItemMeta();
+        if (name != null)
+            meta.setDisplayName(name);
+        if (lore != null) {
+            lore = lore.stream()
+                .map(str -> ChatColor.translateAlternateColorCodes('&', str))
+                .collect(Collectors.toList());
+            meta.setLore(lore);
+        }
+        
+        item.setItemMeta(meta);
+        return item;
+    }
+    
+    @NotNull
+    public static ItemStack create(Material mat, int count,
+                                   @Nullable String name,
+                                   @Nullable List<String> lore) {
+        ItemStack item = new ItemStack(mat, count);
         ItemMeta meta = item.getItemMeta();
         if (name != null)
             meta.setDisplayName(name);
